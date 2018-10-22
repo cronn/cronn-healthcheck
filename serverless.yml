@@ -1,0 +1,38 @@
+service:
+  name: cronn-healthcheck
+
+plugins:
+  - serverless-webpack
+
+custom:
+  webpack:
+    includeModules:
+      forceExclude:
+        - aws-sdk
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - sns:Publish
+      Resource: "*"
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+        - s3:GetObject
+        - s3:ListBucket
+      Resource: "arn:aws:s3:::${opt:s3bucket}/*"
+  region: eu-central-1
+  logRetentionInDays: 30
+
+functions:
+  healthcheck:
+    handler: src/healthcheck.healthcheck
+    memorySize: 128
+    events:
+      - schedule: rate(1 minute)
+    environment:
+      S3BUCKET: ${opt:s3bucket}
+    timeout: 10

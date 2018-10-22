@@ -1,0 +1,10 @@
+[
+    {
+        "expectedContent": "Example",
+        "host": "example.org",
+        "id": "example",
+        "name": "Example.org Webpage",
+        "path": "/",
+        "topic": "arn:aws:sns:eu-central-1:12345678:example-alarm"
+    }
+]
